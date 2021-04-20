@@ -11,28 +11,28 @@
         <h1>MediaCapture, MediaRecorder and Streams API</h1>
     </header>
     <main>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit molestiae itaque facere totam saepe tempore esse temporibus, quae reprehenderit aliquid iusto ea laborum, iure eligendi odio exercitationem sapiente illum quos.</p>
+        <p>Das ist mein Videosstream Jan Schneider Datum:21.04.2021</p>
         
-        <p><button id="btnStart">START RECORDING</button><br/>
-        <button id="btnStop">STOP RECORDING</button></p>
+        <p><button id="btnStart">START Aufnahme</button><br/> <!--Start und Stop Button der Aufnahme-->
+        <button id="btnStop">STOP Aufnahme</button></p>
         
-        <video controls></video>
+        <video controls></video>                                <!--Video Webcame aufnahme-->
         
-        <video id="vid2" controls></video>
+        <video id="vid2" controls></video>                      <!--Video für die Speicherung-->
         
         <!-- could save to canvas and do image manipulation and saving too -->
     </main>    
     <script>
         
         let constraintObj = { 
-            audio: false, 
+            audio: false,                                           /*Ist Audio und Video True, wird alles automatisch angepasst*/
             video: { 
-                facingMode: "user", 
-                width: { min: 640, ideal: 1280, max: 1920 },
+                facingMode: "user",                                 /*User vorallem bei Smartphones Selfikamera, environment hintere Kamera*/
+                width: { min: 640, ideal: 1280, max: 1920 },        /*Angabe bevorzugter größen mit min- und max-Angabe*/
                 height: { min: 480, ideal: 720, max: 1080 } 
             } 
         }; 
-        // width: 1280, height: 720  -- preference only
+        // width: 1280, height: 720  -- ist nur eine Präferenz
         // facingMode: {exact: "user"}
         // facingMode: "environment"
         
@@ -60,21 +60,23 @@
                 console.log(err.name, err.message);
             })
         }
-
-        navigator.mediaDevices.getUserMedia(constraintObj)
-        .then(function(mediaStreamObj) {
-            //connect the media stream to the first video element
-            let video = document.querySelector('video');
+        
+        
+                                                            /*mediaDevices.getUserMedia für Audio- und Videoaufnahme, startet automatisch die Sicherheitsabfrage, gibt ein promise zurück*/
+        navigator.mediaDevices.getUserMedia(constraintObj)                        
+            .then(function(mediaStreamObj) {                                 /*mediaStreamObj enthält den Medien Stream also Audio und Videoinhalte*/
+            
+            let video = document.querySelector('video');                    /*Verbinden des MediaStreams mit dem ersten Videoelement*/
             if ("srcObject" in video) {
-                video.srcObject = mediaStreamObj;
+                video.srcObject = mediaStreamObj;                           /*Weißt den mediaStreamObjekt dem video.scrObject zu*/
             } else {
-                //old version
-                video.src = window.URL.createObjectURL(mediaStreamObj);
+                
+                video.src = window.URL.createObjectURL(mediaStreamObj);     /*Veralteter Zugriff*/
             }
             
-            video.onloadedmetadata = function(ev) {
+            video.onloadedmetadata = function(ev) {                         /*Eventlistener für geladene Metadaten*/
                 //show in the video element what is being captured by the webcam
-                video.play();
+                video.play();                                                /*Bei dem Aufruf des Events wird das Video automatisch gestartet*/
             };
             
             //add listeners for saving video/audio
@@ -102,7 +104,7 @@
                 vidSave.src = videoURL;
             }
         })
-        .catch(function(err) { 
+        .catch(function(err) { /*Verschiedene Fehler bei der Aufnahme*/
             console.log(err.name, err.message); 
         });
         
@@ -110,12 +112,12 @@
         getUserMedia returns a Promise
         resolve - returns a MediaStream Object
         reject returns one of the following errors
-        AbortError - generic unknown cause
-        NotAllowedError (SecurityError) - user rejected permissions
-        NotFoundError - missing media track
-        NotReadableError - user permissions given but hardware/OS error
-        OverconstrainedError - constraint video settings preventing
-        TypeError - audio: false, video: false
+        AbortError - generic unknown cause                              ->undefinierter Fehler
+        NotAllowedError (SecurityError) - user rejected permissions     ->user hat die Security nicht bestätigt, Video und Audio
+        NotFoundError - missing media track                             ->Mediastream wurde nicht gefunden
+        NotReadableError - user permissions given but hardware/OS error ->Hardwareerror oder sonstiges
+        OverconstrainedError - constraint video settings preventing     ->Parameter der Einstellung stimmen nicht mit der Kameraeinstellung überein
+        TypeError - audio: false, video: false                          -> Audio und Video flase im Constrain
         *********************************/
     </script>
 </body>
