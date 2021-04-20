@@ -36,7 +36,7 @@
         // facingMode: {exact: "user"}
         // facingMode: "environment"
         
-        //handle older browsers that might implement getUserMedia in some way
+        /*/handle older browsers that might implement getUserMedia in some way
         if (navigator.mediaDevices === undefined) {
             navigator.mediaDevices = {};
             navigator.mediaDevices.getUserMedia = function(constraintObj) {
@@ -60,7 +60,7 @@
                 console.log(err.name, err.message);
             })
         }
-        
+        /*
         
                                                             /*mediaDevices.getUserMedia für Audio- und Videoaufnahme, startet automatisch die Sicherheitsabfrage, gibt ein promise zurück*/
         navigator.mediaDevices.getUserMedia(constraintObj)                        
@@ -79,32 +79,33 @@
                 video.play();                                                /*Bei dem Aufruf des Events wird das Video automatisch gestartet*/
             };
             
-            //add listeners for saving video/audio
-            let start = document.getElementById('btnStart');
-            let stop = document.getElementById('btnStop');
-            let vidSave = document.getElementById('vid2');
-            let mediaRecorder = new MediaRecorder(mediaStreamObj);
-            let chunks = [];
+            //Listeners für das Speichern des Videos/Audios
+            let start = document.getElementById('btnStart');            /*Startbutton*/
+            let stop = document.getElementById('btnStop');              /*Stopbutton*/
+            let vidSave = document.getElementById('vid2');              /*Videoelement2*/
+            let mediaRecorder = new MediaRecorder(mediaStreamObj);      /*Mediastream Aufnhame API*/
+            let chunks = [];                                            /*Datenarray->transofieren in BLOB->einfügen in Videoelement2*/
             
             start.addEventListener('click', (ev)=>{
-                mediaRecorder.start();
-                console.log(mediaRecorder.state);
+                mediaRecorder.start();                                  /*Start Aufnahme*/
+                console.log(mediaRecorder.state);                       /*Console log*/
             })
             stop.addEventListener('click', (ev)=>{
-                mediaRecorder.stop();
-                console.log(mediaRecorder.state);
+                mediaRecorder.stop();                                   /*Stop Aufnahme*/
+                console.log(mediaRecorder.state);                       /*Console log*/
             });
-            mediaRecorder.ondataavailable = function(ev) {
-                chunks.push(ev.data);
+            mediaRecorder.ondataavailable = function(ev) {              /*Mit jedem Chunk wird die Funktion ondataavailable aufgerufen*/
+                chunks.push(ev.data);                                   /*Und für jedes Event das Array gefüllt*/
+                
             }
-            mediaRecorder.onstop = (ev)=>{
-                let blob = new Blob(chunks, { 'type' : 'video/mp4;' });
-                chunks = [];
-                let videoURL = window.URL.createObjectURL(blob);
-                vidSave.src = videoURL;
+            mediaRecorder.onstop = (ev)=>{                              /*Beim klicken auf Stop Aufnahme*/
+                let blob = new Blob(chunks, { 'type' : 'video/mp4;' }); /*Erzeugen eines Blobs mit chunk und einem Dateiformat*/
+                chunks = [];                                            /*leeren des Arrays*/
+                let videoURL = window.URL.createObjectURL(blob);        /*Erzeugung eines Video URLSs über die Speicherirt des Blobs*/
+                vidSave.src = videoURL;                                 /*Speichern in das zweite Videoelement als source-src*/
             }
         })
-        .catch(function(err) { /*Verschiedene Fehler bei der Aufnahme*/
+        .catch(function(err) {                                          /*Verschiedene Fehler bei der Aufnahme*/
             console.log(err.name, err.message); 
         });
         
