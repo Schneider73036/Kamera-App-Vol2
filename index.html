@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MediaCapture and Streams API</title>
+    <title>MediaCapture, MediaRecorder und Streams API</title>
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
     <header>
-        <h1>MediaCapture, MediaRecorder and Streams API</h1>
+        <h1>MediaCapture, MediaRecorder und Streams API</h1>
     </header>
     <main>
         <p>Das ist mein Videosstream Jan Schneider Datum:21.04.2021</p>
@@ -35,33 +35,7 @@
         // width: 1280, height: 720  -- ist nur eine Präferenz
         // facingMode: {exact: "user"}
         // facingMode: "environment"
-        
-        /*/handle older browsers that might implement getUserMedia in some way
-        if (navigator.mediaDevices === undefined) {
-            navigator.mediaDevices = {};
-            navigator.mediaDevices.getUserMedia = function(constraintObj) {
-                let getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-                if (!getUserMedia) {
-                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
-                }
-                return new Promise(function(resolve, reject) {
-                    getUserMedia.call(navigator, constraintObj, resolve, reject);
-                });
-            }
-        }else{
-            navigator.mediaDevices.enumerateDevices()
-            .then(devices => {
-                devices.forEach(device=>{
-                    console.log(device.kind.toUpperCase(), device.label);
-                    //, device.deviceId
-                })
-            })
-            .catch(err=>{
-                console.log(err.name, err.message);
-            })
-        }
-        /*
-        
+               
                                                             /*mediaDevices.getUserMedia für Audio- und Videoaufnahme, startet automatisch die Sicherheitsabfrage, gibt ein promise zurück*/
         navigator.mediaDevices.getUserMedia(constraintObj)                        
             .then(function(mediaStreamObj) {                                 /*mediaStreamObj enthält den Medien Stream also Audio und Videoinhalte*/
